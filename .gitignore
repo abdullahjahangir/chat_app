@@ -1,0 +1,11 @@
+# Ignore .env files
+*.env
+
+# Ignore the env folder
+env/
+
+# Ignore __pycache__ folders anywhere in the project
+__pycache__/
+
+# Ignore the db.sqlite3 file
+db.sqlite3

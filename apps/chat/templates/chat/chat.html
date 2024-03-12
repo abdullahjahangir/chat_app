@@ -1,0 +1,62 @@
+{% extends "chat/base.html" %}
+{% block title %}Chat{% endblock title %}
+{% block content %}
+    <div class="my-2">
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+                <!-- Chat room name -->
+                <div class="card mb-2">
+                    <div class="card-header text-center">
+                        {% if room.users.all|length > 2 %}
+                            <h5 class="card-title">{{ room.name }}</h5>
+                        {% else %}
+                            {% for room_user in room.users.all %}
+                                {% if user.username != room_user.username %}
+                                    <h5 class="card-title">{{ room_user.username }}</h5>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+    
+                <!-- Chat messages -->
+                <div class="card chat-box mb-3">
+                    <div class="card-body bg-light">
+                        <div class="overflow-auto" style="max-height: 250px;min-height: 150px;">
+                            {% for message in messages %}
+                                {% if message.sender.username == user.username %}
+                                    <div class="row justify-content-end m-2">
+                                        <div style="max-width: 400px;" class="m-2 p-1 rounded border border-success">
+                                            <small class="text-small">{{ message.sender.username }} | {{ message.timestamp }}</small>
+                                            <hr class="p-0 m-0">
+                                            <p>{{ message.content }}</p>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="row m-2">
+                                        <div style="max-width: 400px;" class="m-2 p-1 rounded border border-primary">
+                                            <small class="text-small">{{ message.sender.username }} | {{ message.timestamp }}</small>
+                                            <hr class="p-0 m-0">
+                                            <p>{{ message.content }}</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message Form -->
+                <div class="card mb-3 bg-light">
+                    <div class="card-body">
+                        <form action="{% url 'chat' room.id %}" method="post">
+                            {% csrf_token %}
+                            {{ form.content }}
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

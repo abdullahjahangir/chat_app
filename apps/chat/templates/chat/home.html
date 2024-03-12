@@ -1,0 +1,28 @@
+{% extends "chat/base.html" %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+    <div class="row mt-3">
+        {% for room in chat_rooms %}
+          <div class="col-4">
+            <div class="card m-1">
+              <div class="card-body">
+                <h5 class="card-title">
+                    {% if room.users.all|length > 2 %}
+                        {{ room.name }}
+                    {% else %}
+                        {% for room_user in room.users.all %}
+                            {% if user.username != room_user.username %}
+                                {{ room_user.username }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </h5>
+                <p class="card-text">
+                  <a href="{% url "chat" room.id %}" class="btn btn-primary">Chat</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+    </div>      
+{% endblock content %}
